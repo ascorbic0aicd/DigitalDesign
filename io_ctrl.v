@@ -24,11 +24,19 @@ module io_ctrl(
     input [31:0]addr,
     input [31:0]datain,
     input en,
+    input [31:0]mem_data,
+    input [31:0]key_data,
+    output [31:0]dataout,
+    output read_key,
     output dmem_en,
     output vga_en,
     output [7:0]vga_in
     );
     assign vga_in = datain[7:0];
+    assign dataout = (addr[31:20] == 12'h003) ? key_data : mem_data;
+    assign read_key = (addr[31:20] == 12'h003) ? 1'b1: 1'b0;
     assign vga_en = (addr[31:20] == 12'h002) ? en: 1'b0;
     assign dmem_en = (addr[31:20] == 12'h001) ? en: 1'b0;
+    
+    
 endmodule

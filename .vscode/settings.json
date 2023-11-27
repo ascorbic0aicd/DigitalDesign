@@ -4,5 +4,8 @@
     "verilog.languageServer.rustHdl.enabled": true,
     "verilog.linting.linter": "xvlog",
     "verilog.languageServer.hdlChecker.path": "",
-    "verilog.linting.verilator.runAtFileLocation": true
+    "verilog.linting.verilator.runAtFileLocation": true,
+    "files.associations": {
+        "sys.h": "c"
+    }
 }

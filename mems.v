@@ -136,3 +136,99 @@ module VGA_mem
     assign data = t[read_addr];
 
 endmodule
+
+module key_mem 
+(
+    input keyclk,
+    input cpuclk,
+    input will_read,
+    input [7:0]ascii_key,
+    output reg[7:0]cpu_data    
+);
+    reg [7:0] mem[63:0];
+    reg [5:0] head = 0;
+    reg [5:0] tail = 0;
+
+    reg wen = 1'b1;
+    reg [31:0] cnt = 0;
+    reg [31:0] cnt_fast = 0;
+    reg is_con = 1'b0;
+    reg [7:0] pre_ascii;
+
+    always @(negedge keyclk) 
+    begin
+            if (ascii_key != 0) 
+            begin
+                if (wen) 
+                begin
+                    wen <= 0;
+                    cnt <= 0;
+                    cnt_fast <= 0;
+                    pre_ascii <= ascii_key;
+                    mem[tail] <= ascii_key;
+                    tail <= tail + 1;
+                end
+                else
+                begin
+                    if (ascii_key!=pre_ascii) 
+                    begin
+                        pre_ascii <= 0;
+                        cnt <= 0;
+                        wen <= 1;
+                        is_con <=1'b0;
+                    end
+                    else
+                    begin
+                        if (is_con) 
+                        begin
+                            if (cnt_fast == 30000) 
+                            begin
+                                cnt_fast <= 0;
+                                wen <= 1;    
+                            end
+                            else
+                            begin
+                                cnt_fast <= cnt_fast + 1;
+                            end
+                        end
+                        else
+                        begin
+                            if (cnt==30_0000) 
+                            begin
+                                cnt <= 0;
+                                wen <= 1;
+                                is_con <=1'b1;
+                            end
+                            else
+                            begin
+                                cnt <= cnt + 1;
+                            end   
+                        end
+                    end
+                end
+            end
+            else
+            begin
+                wen <=1;
+                pre_ascii <= 0;
+                cnt <= 0;
+                is_con <= 0;
+            end
+    end
+
+    always @(posedge cpuclk) 
+    begin
+        if (will_read) 
+        begin
+            if (head == tail) 
+            begin
+                cpu_data <= 0;
+            end
+            else
+            begin
+                cpu_data <= mem[head];
+                head = head + 1; 
+            end
+        end       
+    end 
+endmodule

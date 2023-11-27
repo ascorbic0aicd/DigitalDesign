@@ -25,6 +25,8 @@ module top_module(
     input reset,
     input clk,
     input [15:0]SW,
+    input PS2_CLK,
+    input PS2_DATA,
     output [7:0]HEX,
     output [7:0]AN,
     output [3:0]VGA_R,
@@ -53,26 +55,44 @@ module top_module(
     VGA v(SW[11:0],vga_data,CLK100MHZ,dwrclk,clk,daddr,vga_en,vga_in,VGA_R,VGA_G,VGA_B,VGA_HS,VGA_VS);
 
     assign dis_data = SW[15] ? (SW[14] ?(SW[13]? reg_addr:reg_data): (SW[13]? vga_data:daddr)) : (SW[14] ? idataout : cpudbgdata);
-    display_module dis(CLK100MHZ,dis_data,AN,HEX); 
+    display_module dis(CLK100MHZ,dis_data,AN,HEX);
+    
+    wire key_clk;
+    wire [7:0] key_data;
+    wire [7:0] board_data;
+    ferquency_divider div(CLK100MHZ ,99, key_clk);
+    keyboard Qkeyboard(.clk(key_clk),
+	                   .clrn(1'b1),
+	                   .ps2_clk(PS2_CLK),
+	                   .ps2_data(PS2_DATA),
+	                   .ascii_key(board_data)
+                       );
+    wire will_read;
 
+    key_mem Qkey_mem(.keyclk(key_clk),.cpuclk(cpu_clk),.will_read(will_read),.ascii_key(board_data),.cpu_data(key_data));
+    wire [31:0] cpu_read_data;
+    
     io_ctrl myio(.addr(daddr),
                  .datain(ddatain),
                  .en(dwe),
+                 .mem_data(ddataout),
+                 .key_data({24'h000000,key_data}),
+                 .dataout(cpu_read_data),
+                 .read_key(will_read),
                  .vga_en(vga_en),
                  .vga_in(vga_in),
                  .dmem_en(dmem_en));
     //main CPU
 
-    ferquency_divider f_cpu(CLK100MHZ,4,cpu_clk);
+    ferquency_divider f_cpu(CLK100MHZ,2,cpu_clk);
     cpu mycpu(.clock(cpu_clk), 
                  .reset(reset), 
     				 .imemaddr(iaddr), .imemdataout(idataout), .imemclk(iclk), 
-    				 .dmemaddr(daddr), .dmemdataout(ddataout), .dmemdatain(ddatain), .dmemrdclk(drdclk), .dmemwrclk(dwrclk), .dmemop(dop), .dmemwe(dwe), 
+    				 .dmemaddr(daddr), .dmemdataout(cpu_read_data), .dmemdatain(ddatain), .dmemrdclk(drdclk), .dmemwrclk(dwrclk), .dmemop(dop), .dmemwe(dwe), 
     				 .dbgdata(cpudbgdata),
                      .reg_addr(reg_addr),
                      .reg_data(reg_data));
 
-    
     //instruction memory, no writing
     instr_mem instructions(
     	.addr(iaddr[17:2]),

@@ -15,10 +15,11 @@ void entry()
 int main()
 {
     vga_init();
-    putstr(hello);
+    char temp;
     while (1)
     {
-        
+        temp = Qgetchar();
+        putch(temp);
     };
     return 0;
 }
