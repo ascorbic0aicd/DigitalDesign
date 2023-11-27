@@ -1,0 +1,8 @@
+{
+    "verilog.ctags.path": "D:\\edge\\ctags-p6.0.20230924.0-clang-x64\\ctags.exe",
+    "verilog.languageServer.hdlChecker.enabled": true,
+    "verilog.languageServer.rustHdl.enabled": true,
+    "verilog.linting.linter": "xvlog",
+    "verilog.languageServer.hdlChecker.path": "",
+    "verilog.linting.verilator.runAtFileLocation": true
+}

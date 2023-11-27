@@ -33,7 +33,9 @@ module cpu(
 	output	dmemwrclk,
 	output [2:0] dmemop,
 	output	dmemwe,
-	output [31:0] dbgdata);
+	output [31:0] dbgdata,
+    input [4:0]reg_addr,
+    output [31:0]reg_data);
 
     //pc寄存器
     reg [31:0]PC = 0;
@@ -93,7 +95,9 @@ module cpu(
                       .clk(clock),
                       .busW(busW),
                       .busA(busA),
-                      .busB(busB));
+                      .busB(busB),
+                      .debug_addr(reg_addr),
+                      .debug_data(reg_data));
 
     
     always @(*) 
@@ -504,7 +508,9 @@ module RegFile(
     input clk,
     input [31:0]busW,
     output [31:0]busA,    
-    output [31:0]busB
+    output [31:0]busB,
+    input [4:0]debug_addr,
+    output [31:0]debug_data
 );
     reg [31:0]regs[31:0];
     initial 
@@ -521,4 +527,5 @@ module RegFile(
 
     assign busA = regs[Ra];
     assign busB = regs[Rb];    
+    assign debug_data = regs[debug_addr];
 endmodule

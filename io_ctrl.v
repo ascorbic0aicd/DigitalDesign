@@ -1,0 +1,34 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 2023/11/26 17:20:13
+// Design Name: 
+// Module Name: io_ctrl
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+
+module io_ctrl(
+    input [31:0]addr,
+    input [31:0]datain,
+    input en,
+    output dmem_en,
+    output vga_en,
+    output [7:0]vga_in
+    );
+    assign vga_in = datain[7:0];
+    assign vga_en = (addr[31:20] == 12'h002) ? en: 1'b0;
+    assign dmem_en = (addr[31:20] == 12'h001) ? en: 1'b0;
+endmodule

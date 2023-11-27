@@ -26,7 +26,6 @@ module instr_mem(
     output [31:0]data
     );
     instr_rom rom(.addra(addr[12:0]),.clka(clock),.douta(data),.ena(1'b1));
-
 endmodule
 
 module data_mem(
@@ -106,6 +105,34 @@ module data_mem(
     	begin
     	   wmask=4'b0000;
     	end
-    end
-    
+    end  
+endmodule
+
+module VGA_mem 
+(
+	input [11:0]debug_addr,
+	output [31:0]debug_data,
+    input [7:0]ascii_key,
+    input clk,
+	input en,
+	input [31:0]wraddr,
+    input [6:0]read_x,
+    input [4:0]read_y,
+    output [7:0]data
+);
+    reg [7:0] t[2239:0];
+    wire [11:0]write_addr = wraddr[11:0];
+
+	always @(posedge clk) 
+	begin
+		if (en) 
+		begin
+			t[write_addr] <= ascii_key;	
+		end	
+	end
+	wire [11:0]read_addr;
+    assign read_addr = {read_x,read_y};
+	assign debug_data = t[debug_addr];
+    assign data = t[read_addr];
+
 endmodule

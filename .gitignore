@@ -1,1 +1,9 @@
 tests/
+.vscode/
+c_sources/*.o
+c_sources/*.tmp
+c_sources/*.elf
+c_sources/*.coe
+c_sources/*.asm
+c_sources/*.hex
+c_sources/*.dump
