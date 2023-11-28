@@ -1,0 +1,27 @@
+
+default: all
+
+RISCV_GCC ?= gcc
+GCC_WARNS := -Wall -Wextra -Wconversion -pedantic -Wcast-qual -Wcast-align -Wwrite-strings
+
+SRCS := $(wildcard *.c)
+OBJS := $(SRCS:.c=.o)
+EXEC := main
+
+.c.o:
+	$(RISCV_GCC) -c $< -o $@
+
+${EXEC} : $(OBJS)
+	${RISCV_GCC} $(OBJS) -o $@
+
+.PHONY: all clean
+
+all: ${EXEC}
+
+clean:
+	rm -f *.o
+	rm -f *.dump
+	rm -f *.tmp
+	rm -f *.elf
+	rm -f *.hex
+	rm -f *.coe

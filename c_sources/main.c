@@ -1,25 +1,22 @@
 #include "sys.h"
-
-char hello[]="Hello World!\n";
+#include "Qash.h"
 
 int main();
 
 //setup the entry point
+#ifdef RV32
 void entry()
 {
     asm("lui sp, 0x00120"); //set stack to high address of the dmem
     asm("addi sp, sp, -4");
     main();
 }
-
+#endif
 int main()
 {
+#ifdef RV32
     vga_init();
-    char temp;
-    while (1)
-    {
-        temp = Qgetchar();
-        putch(temp);
-    };
+#endif
+    Qash();
     return 0;
 }

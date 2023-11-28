@@ -6,6 +6,12 @@
     "verilog.languageServer.hdlChecker.path": "",
     "verilog.linting.verilator.runAtFileLocation": true,
     "files.associations": {
-        "sys.h": "c"
-    }
+        "sys.h": "c",
+        "hello.h": "c"
+    },
+    "editor.fontSize": 18,
+    "editor.fontFamily": "'Jetbrains Mono'",
+    "editor.fontLigatures": true,
+    "editor.formatOnPaste": true,
+    "files.autoSave": "afterDelay"
 }
