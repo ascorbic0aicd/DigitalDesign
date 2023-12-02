@@ -50,9 +50,10 @@ module top_module(
     wire [31:0]vga_data;
     wire [4:0]reg_addr;
     wire [31:0] reg_data;
-
+    wire vga_offset_en;
+    wire vga_color_en;
     assign reg_addr = SW[4:0];
-    VGA v(SW[11:0],vga_data,CLK100MHZ,dwrclk,clk,daddr,vga_en,vga_in,VGA_R,VGA_G,VGA_B,VGA_HS,VGA_VS);
+    VGA v(vga_color_en,vga_offset_en,SW[11:0],vga_data,CLK100MHZ,dwrclk,clk,daddr,vga_en,vga_in,VGA_R,VGA_G,VGA_B,VGA_HS,VGA_VS);
 
     assign dis_data = SW[15] ? (SW[14] ?(SW[13]? reg_addr:reg_data): (SW[13]? vga_data:daddr)) : (SW[14] ? idataout : cpudbgdata);
     display_module dis(CLK100MHZ,dis_data,AN,HEX);
@@ -80,6 +81,8 @@ module top_module(
                  .dataout(cpu_read_data),
                  .read_key(will_read),
                  .vga_en(vga_en),
+                 .vga_offset_en(vga_offset_en),
+                 .vga_color_en(vga_color_en),
                  .vga_in(vga_in),
                  .dmem_en(dmem_en));
     //main CPU

@@ -1,0 +1,1 @@
+void author(int arg, char args[][50]);

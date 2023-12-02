@@ -115,12 +115,17 @@ module VGA_mem
     input [7:0]ascii_key,
     input clk,
 	input en,
+    input offset_en,
+    input color_en,
 	input [31:0]wraddr,
     input [6:0]read_x,
     input [4:0]read_y,
-    output [7:0]data
+    output [7:0]data,
+    output [2:0]color
 );
     reg [7:0] t[2239:0];
+    reg [2:0] colors[2239:0];
+    reg [4:0]offset;
     wire [11:0]write_addr = wraddr[11:0];
 
 	always @(posedge clk) 
@@ -128,12 +133,32 @@ module VGA_mem
 		if (en) 
 		begin
 			t[write_addr] <= ascii_key;	
-		end	
+		end
+        else
+        begin
+        end
+        if (offset_en) 
+        begin
+            offset <= ascii_key;    
+        end
+        else
+        begin
+            	
+        end
+        if (color_en) 
+        begin
+            colors[write_addr] <= ascii_key;
+        end
+        else
+        begin
+            
+        end	
 	end
 	wire [11:0]read_addr;
-    assign read_addr = {read_x,read_y};
-	assign debug_data = t[debug_addr];
+    assign read_addr = {read_x, (read_y+ offset)&5'b11111};
+	assign debug_data = {27'h0,offset};
     assign data = t[read_addr];
+    assign color = colors[read_addr];
 
 endmodule
 

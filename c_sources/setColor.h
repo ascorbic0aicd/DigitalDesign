@@ -1,0 +1,1 @@
+void setColor_in_cmd(int arg, char args[][50]);

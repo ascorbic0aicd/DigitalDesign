@@ -18,13 +18,13 @@ int Qstrlen(const char* str)
 void Qitos(char *str, int data)
 {
     int flag = 0;
-    unsigned d = data;
+    
     if (data < 0)
     {
         flag = 1;
-        d = -d;
+        data = -data;
     }
-
+    unsigned d = data;
     int n = 0;
     unsigned temp = data;
    

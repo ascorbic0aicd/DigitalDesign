@@ -9,7 +9,7 @@ OBJS := $(SRCS:.c=.o)
 EXEC := main
 
 .c.o:
-	$(RISCV_GCC) -c $< -o $@
+	$(RISCV_GCC) -g -c $< -o $@
 
 ${EXEC} : $(OBJS)
 	${RISCV_GCC} $(OBJS) -o $@

@@ -30,12 +30,17 @@ module io_ctrl(
     output read_key,
     output dmem_en,
     output vga_en,
+    output vga_offset_en,
+    output vga_color_en,
     output [7:0]vga_in
     );
     assign vga_in = datain[7:0];
+
     assign dataout = (addr[31:20] == 12'h003) ? key_data : mem_data;
     assign read_key = (addr[31:20] == 12'h003) ? 1'b1: 1'b0;
     assign vga_en = (addr[31:20] == 12'h002) ? en: 1'b0;
+    assign vga_offset_en = (addr[31:20] == 12'h004) ? en: 1'b0;
+    assign vga_color_en = (addr[31:20] == 12'h005) ? en: 1'b0;
     assign dmem_en = (addr[31:20] == 12'h001) ? en: 1'b0;
     
     

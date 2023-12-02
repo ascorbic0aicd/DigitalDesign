@@ -1,5 +1,8 @@
 tests/
 .vscode/
+debug/
+build/
+bin/
 c_sources/*.o
 c_sources/*.tmp
 c_sources/*.elf

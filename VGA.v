@@ -43,6 +43,8 @@
 
 
 module VGA(
+    input color_en,
+    input offset_en,
     input [11:0]debug_addr,
     output [31:0]debug_data,
     input CLK100MHZ,
@@ -58,6 +60,23 @@ module VGA(
     output VGA_VS
     );
 
+
+    parameter [11:0]WHITE = 12'hFFF;
+    parameter [11:0]BLACK = 12'h000;
+    parameter [11:0]BULE = 12'h47E;
+    parameter [11:0]GREEN = 12'h0F0;
+    parameter [11:0]RED = 12'hF00;
+    parameter [11:0]YELLOW = 12'hFF0;
+    parameter [11:0]PURPLE = 12'h80A;
+    parameter [11:0]ORANGE = 12'hF80;
+    parameter [2:0]white_d = 0;
+    parameter [2:0]red_d = 1;
+    parameter [2:0]bule_d = 2;
+    parameter [2:0]green_d = 3;
+    parameter [2:0]black_d = 4;
+    parameter [2:0]yellow_d = 5;
+    parameter [2:0]orange_d = 6;
+    parameter [2:0]purple_d = 7;
 
     wire [7:0] key_count;
     wire [7:0] cur_key;
@@ -77,12 +96,38 @@ module VGA(
     wire [6:0] read_x;
     wire [3:0] offset_x;
     assign read_y = v_addr[8:4];
+    reg [11:0] RGBS;
+    wire [2:0] color;
 
-    
+    always @(*) 
+    begin
+        case (color)
+            white_d: RGBS = WHITE;
+            bule_d: RGBS = BULE;
+            green_d: RGBS = GREEN;
+            red_d: RGBS = RED;
+            purple_d: RGBS = PURPLE;
+            yellow_d: RGBS = YELLOW;
+            orange_d: RGBS = ORANGE;
+            default: RGBS = BLACK; 
+        endcase    
+    end
     helper_cnt x_gen(clk_vga,valid,read_x,offset_x);
     
     wire [7:0] now_ascii;
-    VGA_mem ascR(.debug_addr(debug_addr),.debug_data(debug_data),.ascii_key(ascii_key),.clk(wrclk), .en(vga_en),.wraddr(wraddr),.read_x(read_x),.read_y(read_y),.data(now_ascii));
+    
+    VGA_mem ascR(.debug_addr(debug_addr),
+                 .debug_data(debug_data),
+                 .ascii_key(ascii_key),
+                 .clk(wrclk), 
+                 .en(vga_en),
+                 .offset_en(offset_en),
+                 .color_en(color_en),
+                 .wraddr(wraddr),
+                 .read_x(read_x),
+                 .read_y(read_y),
+                 .data(now_ascii),
+                 .color(color));
 
     vga_clk myvgaclk(.clk_in1(CLK100MHZ),.reset(1'b0),.locked(temp),.clk_out1(clk_vga));
     
@@ -94,7 +139,7 @@ module VGA(
                       .ena(1'b1));
     wire rom_data;
     assign rom_data = temp_font[offset_x]; 
-    assign vga_data = rom_data?12'b1111_1111_1111:12'b0000_0000_0000;
+    assign vga_data = rom_data?RGBS:12'b0000_0000_0000;
 
     assign VGA_R = valid? R:4'b0000;
     assign VGA_G = valid? G:4'b0000;
@@ -127,7 +172,6 @@ module helper_cnt (
             x <= 0;
         end
     end
-    
 endmodule
 
 module vga_ctrl(

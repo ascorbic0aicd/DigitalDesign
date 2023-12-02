@@ -19,7 +19,7 @@ void fib(int arg, char args[][50])
     {
         
         int a = 0, b = 1;
-        unsigned n = Qstoi(args[1]);
+        int n = Qstoi(args[1]);
 
             
         int temp = 0;
@@ -32,6 +32,7 @@ void fib(int arg, char args[][50])
         else if (n < 0)
         {
             puts("n < 0!");
+            
             return;
         }
         

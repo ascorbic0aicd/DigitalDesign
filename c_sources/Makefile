@@ -17,7 +17,7 @@ EXEC := main
 
 .c.o:
 	$(RISCV_GCC) -march=rv32i -mabi=ilp32 -c $(RISCV_GCC_OPTS) $< -o $@
-
+	
 ${EXEC}.elf : $(OBJS)
 	${RISCV_GCC} -march=rv32i -mabi=ilp32 ${RISCV_GCC_OPTS} -e entry $(OBJS) -o $@
 	${RISCV_OBJDUMP} ${EXEC}.elf > ${EXEC}.dump
@@ -32,7 +32,7 @@ ${EXEC}.hex: ${EXEC}.tmp
 ${EXEC}.coe: ${EXEC}.hex
 	awk ${RISCV_COEGEN} $< > $@
 	awk ${RISCV_COEGEN} ${EXEC}_d.hex > ${EXEC}_d.coe
-
+	
 .PHONY: all clean
 
 all: ${EXEC}.coe
