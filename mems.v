@@ -110,6 +110,7 @@ endmodule
 
 module VGA_mem 
 (
+    input CLK100MHZ,
 	input [11:0]debug_addr,
 	output [31:0]debug_data,
     input [7:0]ascii_key,
@@ -117,6 +118,8 @@ module VGA_mem
 	input en,
     input offset_en,
     input color_en,
+    input cursor_en,
+    input [11:0] cursor_data,
 	input [31:0]wraddr,
     input [6:0]read_x,
     input [4:0]read_y,
@@ -127,6 +130,7 @@ module VGA_mem
     reg [2:0] colors[2239:0];
     reg [4:0]offset;
     wire [11:0]write_addr = wraddr[11:0];
+    reg [11:0] cursor_addr = 0;
 
 	always @(posedge clk) 
 	begin
@@ -151,15 +155,32 @@ module VGA_mem
         end
         else
         begin
-            
         end	
+        if (cursor_en) 
+        begin
+            cursor_addr <= cursor_data;    
+        end
+        else
+        begin
+            
+        end
 	end
 	wire [11:0]read_addr;
     assign read_addr = {read_x, (read_y+ offset)&5'b11111};
 	assign debug_data = {27'h0,offset};
-    assign data = t[read_addr];
-    assign color = colors[read_addr];
+    
 
+    //光标的显示
+    wire clk_4HZ;
+    ferquency_divider f_4HZ(CLK100MHZ,2499_9999,clk_4HZ);
+    reg flag_twinkle =0;
+    always @(posedge clk_4HZ) 
+    begin
+        flag_twinkle <= ~flag_twinkle;
+    end
+
+    assign data = (read_addr == cursor_addr) ? ((flag_twinkle) ? 8'hff:t[read_addr]):t[read_addr];
+    assign color = (read_addr == cursor_addr) ? 3'h0: colors[read_addr];
 endmodule
 
 module key_mem 

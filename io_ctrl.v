@@ -32,7 +32,9 @@ module io_ctrl(
     output vga_en,
     output vga_offset_en,
     output vga_color_en,
-    output [7:0]vga_in
+    output vga_cursor_en,
+    output [7:0]vga_in,
+    output [11:0]vga_cursor_data
     );
     assign vga_in = datain[7:0];
 
@@ -41,7 +43,9 @@ module io_ctrl(
     assign vga_en = (addr[31:20] == 12'h002) ? en: 1'b0;
     assign vga_offset_en = (addr[31:20] == 12'h004) ? en: 1'b0;
     assign vga_color_en = (addr[31:20] == 12'h005) ? en: 1'b0;
+    assign vga_cursor_en = (addr[31:20] == 12'h006) ? en: 1'b0;
     assign dmem_en = (addr[31:20] == 12'h001) ? en: 1'b0;
+    assign vga_cursor_data = datain[11:0];
     
     
 endmodule

@@ -12,14 +12,16 @@ int vga_ch = 0;
 int line_d = 0;
 char need_plus_off = 0;
 unsigned char ends[32];
+short *vga_cursor_p = (short*)CURSOR_ADDR;
 #define true_y ((line_d + vga_line) & VGA_MAXREG)
+#define cursor_loc ((vga_ch << 5) + vga_line)
 void vga_init()
 {
     vga_line = 0;
     line_d = 0;
     vga_ch = 1;
-
     (*line_NO) = 0;
+    (*vga_cursor_p) = 0;
     need_plus_off = 0;
     for (int i = 0; i < VGA_MAXCOL; i++)
     {
@@ -40,39 +42,52 @@ void vga_clear_line(int y)
 void putchar(const char ch) 
 {
 
-    if(ch == 8) //backspace
+    if(ch == BACKSPACE) //backspace
     {
         vga_ch--;
         vga_start[(vga_ch << 5) + vga_line] = 0;
         if (vga_ch == 0)
         {
-            vga_line--;
-            vga_ch = ends[vga_line + vga_line];
-            
+            if (vga_line)
+            {
+                vga_line--;
+            }
+            else
+            {
+                vga_line = 31;
+            }
+            vga_ch = ends[vga_line];
         }
-        
+        (*vga_cursor_p) = cursor_loc;
         return;
     }
     if(ch == 10) //enter
     {
-        //TODO
         ends[vga_line] = vga_ch;
         vga_ch = 1;
         vga_line++;
         vga_rollLine();
+        (*vga_cursor_p) = cursor_loc;
         return;
+    }
+    
+    if (vga_ch == VGA_MAXCOL)
+    {
+        vga_ch = 1;
+        vga_line++;
+        vga_rollLine();
     }
     vga_start[(vga_ch << 5) + vga_line] = ch;
     color_start[(vga_ch << 5) + vga_line] = global_color; 
     vga_ch++;
     if(vga_ch>=VGA_MAXCOL)
     {
-        //TODO
-        ends[true_y] = VGA_MAXCOL;
+        ends[vga_line] = VGA_MAXCOL;
         vga_ch = 1;
         vga_line++;
         vga_rollLine();
     }
+    (*vga_cursor_p) = cursor_loc;
     return;
 }
 void vga_rollLine()

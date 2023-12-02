@@ -43,6 +43,8 @@
 
 
 module VGA(
+    input cursor_en,
+    input [11:0]cursor_data,
     input color_en,
     input offset_en,
     input [11:0]debug_addr,
@@ -116,18 +118,22 @@ module VGA(
     
     wire [7:0] now_ascii;
     
-    VGA_mem ascR(.debug_addr(debug_addr),
+    VGA_mem ascR(.CLK100MHZ(CLK100MHZ),
+                 .debug_addr(debug_addr),
                  .debug_data(debug_data),
                  .ascii_key(ascii_key),
                  .clk(wrclk), 
                  .en(vga_en),
                  .offset_en(offset_en),
                  .color_en(color_en),
+                 .cursor_en(cursor_en),
+                 .cursor_data(cursor_data),
                  .wraddr(wraddr),
                  .read_x(read_x),
                  .read_y(read_y),
                  .data(now_ascii),
-                 .color(color));
+                 .color(color)
+                 );
 
     vga_clk myvgaclk(.clk_in1(CLK100MHZ),.reset(1'b0),.locked(temp),.clk_out1(clk_vga));
     

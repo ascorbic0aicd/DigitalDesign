@@ -20,10 +20,8 @@ void Qash()
         puts("$ ");
         setColour(c);
         getbuff(buff);
-        char args[10][50];
+        char args[20][50];
         arg = checkBuff(buff, args);
-        //printf("arg = %d\n",arg);
-
         if (arg != 114 && arg != 0)
         {
             exec(arg, args);            
@@ -43,9 +41,7 @@ void getbuff(char buff[])
     while (1)
     {
         c = getchar();
-
         buff[i] = c;
-
         if (c == BACKSPACE)
         {
             if (i != 0)
@@ -53,9 +49,7 @@ void getbuff(char buff[])
                 putchar(c);
                 i--;
                 buff[i] = 0;
-        
             }
-            
         }
         else
         {
@@ -81,12 +75,18 @@ int checkBuff(char buff[],char args[][50])
         if (buff[i + j]!= ' ')
         {
             int k = 0;
-            while (buff[i + j] != ' ' && buff[i + j] != '\0')
+            while (buff[i + j] != ' ' && buff[i + j] != '\0' && k < 50)
             {
                 args[arg][k] = buff[i + j];
                 j++;
                 k++;
             }
+            if (k >= 50)
+            {   
+                puts("The arg is too long!");
+                return 114;
+            }
+            
             args[arg][k] = '\0';
 
             if (arg == 10)

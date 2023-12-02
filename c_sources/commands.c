@@ -9,7 +9,7 @@
 #include "fib.h"
 #include "sys.h"
 
-Func funcs[NUM_OF_FUNC] = {{"hello" ,hello}, {"echo", echo}, {"fib", fib},{"help", help},{"author",author},{"setColor",setColor_in_cmd},{"clear",clear}};
+Func funcs[NUM_OF_FUNC] = {{"hello" ,hello}, {"echo", echo}, {"fib", fib},{"help", help},{"author",author},{"setcolor",setColor_in_cmd},{"clear",clear}};
 
 func_ptr findFunc(char *name)
 {
