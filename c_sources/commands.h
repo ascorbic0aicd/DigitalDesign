@@ -1,5 +1,5 @@
 
-#define NUM_OF_FUNC 7
+#define NUM_OF_FUNC 8
 typedef void (*func_ptr)(int, char [][50]);
 typedef struct
 {

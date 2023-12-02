@@ -1,0 +1,1 @@
+void getTime(int arg, char args[][50]);

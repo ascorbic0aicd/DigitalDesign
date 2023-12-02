@@ -13,6 +13,8 @@ int line_d = 0;
 char need_plus_off = 0;
 unsigned char ends[32];
 short *vga_cursor_p = (short*)CURSOR_ADDR;
+
+int *timer = (int *)TIMER_ADDR;
 #define true_y ((line_d + vga_line) & VGA_MAXREG)
 #define cursor_loc ((vga_ch << 5) + vga_line)
 void vga_init()
@@ -70,7 +72,7 @@ void putchar(const char ch)
         (*vga_cursor_p) = cursor_loc;
         return;
     }
-    
+
     if (vga_ch == VGA_MAXCOL)
     {
         vga_ch = 1;
@@ -149,6 +151,11 @@ void gets(char *str)
     str[cnt] = 0;
     return;
     
+}
+
+int time(int _)
+{
+    return (*timer);
 }
 unsigned int __mulsi3(unsigned int a, unsigned int b)
 {

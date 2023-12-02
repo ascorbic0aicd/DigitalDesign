@@ -12,7 +12,9 @@
     "qstring.h": "c",
     "echo.h": "c",
     "author.h": "c",
-    "setcolor.h": "c"
+    "setcolor.h": "c",
+    "fib.h": "c",
+    "gettime.h": "c"
   },
   "editor.fontSize": 16,
   "editor.fontFamily": "'Jetbrains Mono'",

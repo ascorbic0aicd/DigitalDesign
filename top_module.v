@@ -60,6 +60,8 @@ module top_module(
     assign dis_data = SW[15] ? (SW[14] ?(SW[13]? reg_addr:reg_data): (SW[13]? vga_data:daddr)) : (SW[14] ? idataout : cpudbgdata);
     display_module dis(CLK100MHZ,dis_data,AN,HEX);
     
+    wire [31:0] time_data;
+    clock timer(CLK100MHZ,time_data);
     wire key_clk;
     wire [7:0] key_data;
     wire [7:0] board_data;
@@ -76,6 +78,7 @@ module top_module(
     wire [31:0] cpu_read_data;
     
     io_ctrl myio(.addr(daddr),
+                 .timer_data(time_data),
                  .datain(ddatain),
                  .en(dwe),
                  .mem_data(ddataout),
@@ -116,4 +119,16 @@ module top_module(
 
         
 
+endmodule
+
+module clock(
+    input CLK100MHZ,
+    output reg [31:0]data = 0
+    );
+    wire clk;
+    ferquency_divider f(CLK100MHZ,4_9999,clk);
+    always @(posedge clk ) 
+    begin
+        data <= data + 1;    
+    end 
 endmodule

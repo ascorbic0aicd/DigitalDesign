@@ -4,12 +4,13 @@
 #include "author.h"
 #include "setColor.h"
 #include "clear.h"
+#include "getTime.h"
 #include "Qstring.h"
 #include "commands.h"
 #include "fib.h"
 #include "sys.h"
 
-Func funcs[NUM_OF_FUNC] = {{"hello" ,hello}, {"echo", echo}, {"fib", fib},{"help", help},{"author",author},{"setcolor",setColor_in_cmd},{"clear",clear}};
+Func funcs[NUM_OF_FUNC] = {{"hello" ,hello}, {"echo", echo}, {"fib", fib},{"help", help},{"author",author},{"setcolor",setColor_in_cmd},{"clear",clear},{"time",getTime}};
 
 func_ptr findFunc(char *name)
 {

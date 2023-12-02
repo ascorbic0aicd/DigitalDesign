@@ -83,7 +83,7 @@ int checkBuff(char buff[],char args[][50])
             }
             if (k >= 50)
             {   
-                puts("The arg is too long!");
+                puts("The arg is too long!\n");
                 return 114;
             }
             
@@ -91,7 +91,7 @@ int checkBuff(char buff[],char args[][50])
 
             if (arg == 10)
             {
-                puts("There are to many args!");
+                puts("There are to many args!\n");
                 return 114;
             }
             arg++;

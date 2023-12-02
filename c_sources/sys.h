@@ -3,6 +3,7 @@
 #define VGA_LINE_NO 0x00400000
 #define COLOR_REG 0x00500000
 #define CURSOR_ADDR 0x00600000
+#define TIMER_ADDR 0x00700000
 #define VGA_MAXLINE 30
 #define VGA_MAXREG 31
 #define VGA_MAXCOL 70
@@ -32,6 +33,7 @@ void vga_rollLine();
 void vga_clear_line(int y); 
 void setColour(color c);
 char getColor();
+int time(int _);
 unsigned int __mulsi3(unsigned int a, unsigned int b);
 unsigned int __umodsi3(unsigned int a, unsigned int b);
 unsigned int __udivsi3(unsigned int a, unsigned int b);
