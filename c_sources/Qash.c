@@ -11,7 +11,7 @@ void Qash()
     {
         color c = getColor();
         setColour(GREEN);
-        puts("qxb&cry&lyp@verilog");
+        puts("new:qxb&cry&lyp@verilog");
         setColour(WHITE);
         puts(":");
         setColour(BLUE);
@@ -112,7 +112,7 @@ void exec(int arg, char args[][50])
     func_ptr p = findFunc(args[0]);
     if (p==NULL)
     {
-        puts("Command Not Found!");
+        puts("Unknown Command!");
     }
     else
     {

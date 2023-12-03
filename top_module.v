@@ -21,6 +21,8 @@
 
 
 module top_module(
+    input UART_TXD_IN,
+    output UART_RXD_OUT,
     input CLK100MHZ,
     input reset,
     input clk,
@@ -55,6 +57,17 @@ module top_module(
     assign reg_addr = SW[4:0];
     wire cursor_en;
     wire [11:0]cursor_data;
+
+    
+    wire [31:0] uart_idata;
+    wire uart_iwe;
+    wire [31:0] no_use;    
+    wire [31:0] uart_iaddr;
+    wire [31:0] uart_dataaddr;
+    wire [31:0] uart_mdata;
+    wire  uart_dwe;
+    wire uart_halt;
+    wire uart_rst;
     VGA v(cursor_en,cursor_data,vga_color_en,vga_offset_en,SW[11:0],vga_data,CLK100MHZ,dwrclk,clk,daddr,vga_en,vga_in,VGA_R,VGA_G,VGA_B,VGA_HS,VGA_VS);
 
     assign dis_data = SW[15] ? (SW[14] ?(SW[13]? reg_addr:reg_data): (SW[13]? vga_data:daddr)) : (SW[14] ? idataout : cpudbgdata);
@@ -95,8 +108,8 @@ module top_module(
     //main CPU
 
     ferquency_divider f_cpu(CLK100MHZ,2,cpu_clk);
-    cpu mycpu(.clock(cpu_clk), 
-                 .reset(reset), 
+    cpu mycpu(.clock(cpu_clk&~uart_halt), 
+                 .reset(reset|uart_rst), 
     				 .imemaddr(iaddr), .imemdataout(idataout), .imemclk(iclk), 
     				 .dmemaddr(daddr), .dmemdataout(cpu_read_data), .dmemdatain(ddatain), .dmemrdclk(drdclk), .dmemwrclk(dwrclk), .dmemop(dop), .dmemwe(dwe), 
     				 .dbgdata(cpudbgdata),
@@ -105,20 +118,34 @@ module top_module(
 
     //instruction memory, no writing
     instr_mem instructions(
-    	.addr(iaddr[17:2]),
-    	.clock(iclk),
+    	.addr(uart_halt?uart_iaddr[17:2]:iaddr[17:2]),
+    	.clock(uart_halt?~cpu_clk:iclk),
+        .iwe(uart_iwe),
+        .datain(uart_idata),
     	.data(idataout));
     //data memory	
-    data_mem dmem(.addr(daddr), 
+    data_mem dmem(.addr(uart_halt?uart_dataaddr: daddr), 
                  .dataout(ddataout), 
-    				 .datain(ddatain), 
+    				 .datain(uart_halt?uart_mdata:ddatain), 
     				 .rdclk(drdclk), 
-    				 .wrclk(dwrclk), 
-    				 .memop(dop), 
-    				 .we(dmem_en));
+    				 .wrclk(uart_halt?~cpu_clk:dwrclk), 
+    				 .memop(uart_halt?3'b010:dop), 
+    				 .we(uart_halt?uart_dwe: dmem_en));
 
-        
-
+    uart_port urat(  .clk(cpu_clk),
+                     .clk100m(CLK100MHZ),
+                     .rxd_out(UART_RXD_OUT),
+                     .txd_in(UART_TXD_IN),
+                     .dbgdata(no_use),
+                     .rst(reset),
+                     .instaddr(uart_iaddr),
+                     .instdata(uart_idata),
+                     .iwe(uart_iwe),
+                     .dataaddr(uart_dataaddr),
+                     .mdata(uart_mdata),
+                     .dwe(uart_dwe),
+                     .cpuhalt(uart_halt),
+                     .cpureset(uart_rst));
 endmodule
 
 module clock(

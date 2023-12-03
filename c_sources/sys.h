@@ -20,6 +20,8 @@ typedef enum
     PURPLE = 7
 } color;
 
+void setColour(color c);
+char getColor();
 #define RV32
 #ifdef RV32
 #define NULL 0xFFFFFFFF
@@ -31,12 +33,7 @@ char getchar();
 void gets(char *str);
 void vga_rollLine();
 void vga_clear_line(int y); 
-void setColour(color c);
-char getColor();
 int time(int _);
-unsigned int __mulsi3(unsigned int a, unsigned int b);
-unsigned int __umodsi3(unsigned int a, unsigned int b);
-unsigned int __udivsi3(unsigned int a, unsigned int b);
 
 #define assert(expr) if(!expr) puts("something error!\n");
 #else

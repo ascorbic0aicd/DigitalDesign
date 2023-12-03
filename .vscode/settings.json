@@ -14,7 +14,11 @@
     "author.h": "c",
     "setcolor.h": "c",
     "fib.h": "c",
-    "gettime.h": "c"
+    "gettime.h": "c",
+    "helper.h": "c",
+    "cmath": "c",
+    "*.tcc": "c",
+    "cstdlib": "c"
   },
   "editor.fontSize": 16,
   "editor.fontFamily": "'Jetbrains Mono'",
