@@ -68,6 +68,11 @@ module top_module(
     wire  uart_dwe;
     wire uart_halt;
     wire uart_rst;
+
+    wire [31:0] cpu_read_data;
+    wire [31:0] heap_data;
+    wire heap_en;
+
     VGA v(cursor_en,cursor_data,vga_color_en,vga_offset_en,SW[11:0],vga_data,CLK100MHZ,dwrclk,clk,daddr,vga_en,vga_in,VGA_R,VGA_G,VGA_B,VGA_HS,VGA_VS);
 
     assign dis_data = SW[15] ? (SW[14] ?(SW[13]? reg_addr:reg_data): (SW[13]? vga_data:daddr)) : (SW[14] ? idataout : cpudbgdata);
@@ -88,13 +93,13 @@ module top_module(
     wire will_read;
 
     key_mem Qkey_mem(.keyclk(key_clk),.cpuclk(cpu_clk),.will_read(will_read),.ascii_key(board_data),.cpu_data(key_data));
-    wire [31:0] cpu_read_data;
-    
+
     io_ctrl myio(.addr(daddr),
                  .timer_data(time_data),
                  .datain(ddatain),
                  .en(dwe),
                  .mem_data(ddataout),
+                 .heap_data(heap_data),
                  .key_data({24'h000000,key_data}),
                  .dataout(cpu_read_data),
                  .read_key(will_read),
@@ -103,6 +108,7 @@ module top_module(
                  .vga_color_en(vga_color_en),
                  .vga_in(vga_in),
                  .dmem_en(dmem_en),
+                 .heap_en(heap_en),
                  .vga_cursor_data(cursor_data),
                  .vga_cursor_en(cursor_en));
     //main CPU
@@ -131,6 +137,14 @@ module top_module(
     				 .wrclk(uart_halt?~cpu_clk:dwrclk), 
     				 .memop(uart_halt?3'b010:dop), 
     				 .we(uart_halt?uart_dwe: dmem_en));
+
+    data_mem heap_mem(.addr(daddr), 
+                      .dataout(heap_data), 
+    				  .datain(ddatain), 
+    				  .rdclk(drdclk), 
+    				  .wrclk(dwrclk), 
+    				  .memop(dop), 
+    				  .we(uart_halt?1'b0: heap_en));
 
     uart_port urat(  .clk(cpu_clk),
                      .clk100m(CLK100MHZ),

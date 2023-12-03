@@ -19,12 +19,12 @@ typedef enum
     ORANGE = 6,
     PURPLE = 7
 } color;
-
+#include "Qrand.h"
 void setColour(color c);
 char getColor();
 #define RV32
 #ifdef RV32
-#define NULL 0xFFFFFFFF
+#define NULL (void *)0xFFFFFFFF
 extern int vga_line;
 void puts(const char* str);
 void putchar(const char ch);
@@ -38,5 +38,6 @@ int time(int _);
 #define assert(expr) if(!expr) puts("something error!\n");
 #else
 #include<stdio.h>
+#include<time.h>
 #endif
 

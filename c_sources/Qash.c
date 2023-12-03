@@ -11,7 +11,7 @@ void Qash()
     {
         color c = getColor();
         setColour(GREEN);
-        puts("new:qxb&cry&lyp@verilog");
+        puts("qxb&cry&lyp@verilog");
         setColour(WHITE);
         puts(":");
         setColour(BLUE);
@@ -24,8 +24,13 @@ void Qash()
         arg = checkBuff(buff, args);
         if (arg != 114 && arg != 0)
         {
-            exec(arg, args);            
-            putchar('\n');
+            exec(arg, args);
+            if (Qstrcmp(args[0],"clear"))
+            {
+                putchar('\n');
+            }
+                        
+            
         }
     }
     

@@ -26,10 +26,12 @@ module io_ctrl(
     input [31:0]datain,
     input en,
     input [31:0]mem_data,
+    input [31:0]heap_data,
     input [31:0]key_data,
     output reg[31:0]dataout,
     output read_key,
     output dmem_en,
+    output heap_en,
     output vga_en,
     output vga_offset_en,
     output vga_color_en,
@@ -42,7 +44,8 @@ module io_ctrl(
     begin
         case (addr[31:20])
             12'h003:dataout = key_data;
-            12'h007:dataout = timer_data; 
+            12'h007:dataout = timer_data;
+            12'h008:dataout = heap_data; 
             default:dataout = mem_data; 
         endcase    
     end
@@ -52,6 +55,7 @@ module io_ctrl(
     assign vga_color_en = (addr[31:20] == 12'h005) ? en: 1'b0;
     assign vga_cursor_en = (addr[31:20] == 12'h006) ? en: 1'b0;
     assign dmem_en = (addr[31:20] == 12'h001) ? en: 1'b0;
+    assign heap_en = (addr[31:20] == 12'h008) ? en: 1'b0;
     assign vga_cursor_data = datain[11:0];
     
     
