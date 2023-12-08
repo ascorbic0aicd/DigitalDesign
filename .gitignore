@@ -10,4 +10,6 @@ c_sources/*.coe
 c_sources/*.asm
 c_sources/*.hex
 c_sources/*.dump
+c_sources/*.exe
 main
+
