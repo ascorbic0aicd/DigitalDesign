@@ -178,8 +178,8 @@ module scancode_ram(input clk,
     reg [7:0] ascii_tab_shift[255:0];
     initial 
     begin
-        $readmemh("D:/DigitalDesign/lab06/key_board/scancode.txt", ascii_tab, 0, 255);
-        $readmemh("D:/DigitalDesign/lab06/key_board/scancode_shift.txt", ascii_tab_shift, 0, 255);
+        $readmemh("./data/scancode.txt", ascii_tab, 0, 255);
+        $readmemh("./data/scancode_shift.txt", ascii_tab_shift, 0, 255);
     end
     always @(posedge clk)
     begin
