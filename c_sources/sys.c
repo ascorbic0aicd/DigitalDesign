@@ -1,6 +1,5 @@
 #include "sys.h"
 #include "Qstring.h"
-
 char *color_start = (char *)COLOR_REG;
 char global_color;
 
@@ -132,7 +131,12 @@ char getchar()
     }
     return 0;
 }
-
+bool kbhit()
+{
+    char *check_k = (char *)CHECK_KEY;
+    char p = *check_k;
+    return p != 0 ;
+}
 void gets(char *str)
 {
     int cnt = 0;

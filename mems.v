@@ -277,6 +277,18 @@ module key_mem
                 cpu_data <= mem[head];
                 head = head + 1; 
             end
+        end
+        else
+        begin
+            if (head == tail) 
+            begin
+                cpu_data <= 0;    
+            end
+            else
+            begin
+                cpu_data <= mem[head];
+            end
+                
         end       
     end 
 endmodule

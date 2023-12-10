@@ -44,6 +44,7 @@ module io_ctrl(
     begin
         case (addr[31:20])
             12'h003:dataout = key_data;
+            12'h103:dataout = key_data;
             12'h007:dataout = timer_data;
             12'h008:dataout = heap_data; 
             default:dataout = mem_data; 
