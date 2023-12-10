@@ -1,0 +1,1 @@
+void snake(int arg, char args[][50]);

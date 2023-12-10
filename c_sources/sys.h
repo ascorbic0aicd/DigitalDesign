@@ -23,6 +23,7 @@ typedef enum
 #include "Qrand.h"
 void setColour(color c);
 char getColor();
+void vga_init(void);
 void putchar_c(const char ch, color C);
 void puts_c(const char *str,color c);
 typedef enum{true = 1,false = 0} bool;
@@ -32,13 +33,13 @@ typedef enum{true = 1,false = 0} bool;
     extern int vga_line;
 void puts(const char* str);
 void putchar(const char ch);
-void vga_init(void);
 char getchar();
 void gets(char *str);
 void vga_rollLine();
 void vga_clear_line(int y); 
 int time(int _);
 bool kbhit();
+void sleep(int d);
 #define assert(expr) if(!expr) puts("something error!\n");
 #else
 #include<stdio.h>

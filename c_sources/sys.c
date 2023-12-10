@@ -18,22 +18,7 @@ bool in_normal = true;
 #ifdef RV32
 #define true_y ((line_d + vga_line) & VGA_MAXREG)
 #define cursor_loc ((vga_ch << 5) + vga_line)
-void vga_init()
-{
-    vga_line = 0;
-    line_d = 0;
-    vga_ch = 1;
-    (*line_NO) = 0;
-    (*vga_cursor_p) = 0;
-    need_plus_off = 0;
-    for (int i = 0; i < VGA_MAXCOL; i++)
-    {
-        for(int j = 0; j < VGA_MAXREG; j++)
-        {
-            vga_start[ (i<<5) + j ] = 0;
-        }       
-    }
-}
+
 void vga_clear_line(int y)
 {
     for (int i = 0; i < VGA_MAXCOL; i++)
@@ -156,6 +141,15 @@ int time(int _)
 {
     return (*timer);
 }
+void sleep(int d)
+{
+    int start = time(0);
+    volatile int end = time(0); 
+    while (end - start < d)
+    {
+        end = time(0);
+    }
+}
 #endif
 void setColour(color c)
 {
@@ -230,6 +224,24 @@ void putchar_c(const char ch, color C)
 }
 void displayChar(int x,int y,char ch,color c)
 {
+#ifdef RV32
     vga_start[(x << 5) + y] = ch;
     color_start[(x << 5) + y] = c;
+#endif
+}
+void vga_init()
+{
+    vga_line = 0;
+    line_d = 0;
+    vga_ch = 1;
+    (*line_NO) = 0;
+    (*vga_cursor_p) = 0;
+    need_plus_off = 0;
+    for (int i = 0; i < VGA_MAXCOL; i++)
+    {
+        for(int j = 0; j < VGA_MAXREG; j++)
+        {
+            vga_start[ (i<<5) + j ] = 0;
+        }       
+    }
 }

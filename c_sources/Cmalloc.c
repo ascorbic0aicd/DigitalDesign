@@ -23,20 +23,30 @@ void Cmalloc_init(void)
 
 void * Cmalloc(unsigned int numbytes)
 {
-    unsigned int current_location, otherbck_location;
+    char *current_location, *otherbck_location;
     mem_control_block * current_location_mcb = NULL,* other_location_mcb = NULL;
     void * memory_location = NULL;  //可用的block数据区首地址
     unsigned int process_blocksize;
-
     if(has_initialized == 0) {
         Cmalloc_init();
     }
-
-    current_location = (unsigned)HEAP_START;
+    current_location= HEAP_START;
     //寻找可用的堆空间
-    while(current_location < (unsigned)HEAP_END){  
+    while(current_location < HEAP_END){  
+        //puts("fenpi");
         current_location_mcb = (mem_control_block *)current_location;
+        //printf("mcb = %x\n",current_location_mcb);
+        //printf("%d\n",current_location_mcb->is_available);
+        //char t = current_location_mcb->is_available;
+        //puts("gets");
+        //char str[20];
+        //Qitos(str,current_location_mcb->is_available);
+        //printf("%d\n",current_location_mcb->is_available);
+        //puts("ava");
+        //puts(str);
+        //puts("ava1");
         if(current_location_mcb->is_available){
+            //puts("available");
             //block空间大小正好
             if((current_location_mcb->current_blocksize == numbytes)){   
                 current_location_mcb->is_available = 0; 
@@ -55,11 +65,10 @@ void * Cmalloc(unsigned int numbytes)
                 other_location_mcb->current_blocksize = process_blocksize - numbytes - sizeof(mem_control_block);
                 otherbck_location = current_location + process_blocksize + sizeof(mem_control_block); 
     
-                if(otherbck_location < (unsigned)HEAP_END){
+                if(otherbck_location < HEAP_END){
                     other_location_mcb = (mem_control_block *)(otherbck_location);
                     other_location_mcb->prior_blocksize = process_blocksize - numbytes - sizeof(mem_control_block);
                 }
-                
                 memory_location = (void *)(current_location + sizeof(mem_control_block));
                 break;
             } 
@@ -76,36 +85,36 @@ void * Cmalloc(unsigned int numbytes)
 
 void Cfree(void *firstbyte)
 {
-    unsigned int current_location,otherbck_location;
+    char *current_location, *otherbck_location;
     mem_control_block * current_mcb = NULL,* next_mcb = NULL,* prior_mcb = NULL,* other_mcb = NULL;
     current_location = (unsigned int)firstbyte - sizeof(mem_control_block);
     current_mcb = (mem_control_block *)current_location;
     current_mcb->is_available = 1;
 
     otherbck_location = current_location + sizeof(mem_control_block) + current_mcb->current_blocksize;
-    if(otherbck_location < (unsigned)HEAP_END){
+    if(otherbck_location < HEAP_END){
         //判断后一块是否可整合
         next_mcb = (mem_control_block *)otherbck_location;
         //整合可用空间
         if(next_mcb->is_available > 0){
             current_mcb->current_blocksize = current_mcb->current_blocksize + sizeof(mem_control_block) + next_mcb->current_blocksize;
             otherbck_location = current_location + sizeof(mem_control_block) + current_mcb->current_blocksize;
-            if(otherbck_location < (unsigned)HEAP_END){
+            if(otherbck_location < HEAP_END){
                 other_mcb = (mem_control_block *)otherbck_location;
                 other_mcb->prior_blocksize = current_mcb->current_blocksize;
             }
         }
     }
 
-    if(current_location > (unsigned)HEAP_START){
+    if(current_location > HEAP_START){
         //判断前一块是否可整合
         prior_mcb = (mem_control_block *)(current_location - sizeof(mem_control_block) - current_mcb->prior_blocksize);
         //整合可用空间
-        if ((unsigned)prior_mcb >= (unsigned)HEAP_START && prior_mcb->is_available > 0)
+        if (prior_mcb >= HEAP_START && prior_mcb->is_available > 0)
         {
             prior_mcb->current_blocksize = prior_mcb->current_blocksize + sizeof(mem_control_block) + current_mcb->current_blocksize;
             otherbck_location = current_location + sizeof(mem_control_block) + current_mcb->current_blocksize;
-            if(otherbck_location < (unsigned)HEAP_END){
+            if(otherbck_location < HEAP_END){
                 other_mcb = (mem_control_block *)otherbck_location;
                 other_mcb->prior_blocksize = prior_mcb->current_blocksize;
             }
@@ -115,19 +124,26 @@ void Cfree(void *firstbyte)
 
 void Cmprint(void)
 {
-    unsigned int current_location = HEAP_START;
+    char * current_location = HEAP_START;
     mem_control_block * current_location_mcb = NULL;
     
     //寻找可用的堆空间
     unsigned k=1;
     char str[10];
+    puts("HEAP_START");
+    Qitos(str,(unsigned)HEAP_START);
+    puts(str);
 
     puts("sizeof(mem_control_block) is");
     Qitos(str, sizeof(mem_control_block));
     puts(str);
     puts("  ");
-    while(current_location < (unsigned)HEAP_END){  
+    while(current_location < HEAP_END){  
         current_location_mcb = (mem_control_block *)current_location;
+        puts("current_location_mcb");
+        Qitos(str,current_location_mcb);
+        puts(str);
+
         puts("-----There is the");
         Qitos(str,k);
         puts(str);
@@ -148,13 +164,13 @@ void Cmprint(void)
     puts("  ");
 }
 int Cmnum(void){
-    unsigned int current_location = (unsigned)HEAP_START;
+    char * current_location = HEAP_START;
     mem_control_block *current_location_mcb = NULL;
 
     // 寻找可用的堆空间
     unsigned k = 0;
     
-    while (current_location < (unsigned)HEAP_END)
+    while (current_location < HEAP_END)
     {
         current_location_mcb = (mem_control_block *)current_location;
         if (current_location_mcb->is_available>0)

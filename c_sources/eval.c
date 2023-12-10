@@ -239,7 +239,7 @@ void EvaluateExpression(char *expr)
         }
         else{
             char str[20];
-            if(!Empty(OPND)){
+            if(Size(OPND) == 1){
                 int x = Top(OPND);
                 Qitos(str, x);
                 puts(str);

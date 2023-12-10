@@ -10,9 +10,10 @@
 #include "fib.h"
 #include "sys.h"
 #include "eval.h"
+#include "snake.h"
 
 Func funcs[NUM_OF_FUNC] = {{"hello" ,hello}, {"echo", echo}, {"fib", fib},{"help", help},{"author",author},
-                            {"setcolor",setColor_in_cmd},{"clear",clear},{"time",getTime}, {"eval", eval}};
+                            {"setcolor",setColor_in_cmd},{"clear",clear},{"time",getTime}, {"eval", eval}, {"snake", snake}};
 
 func_ptr findFunc(char *name)
 {
