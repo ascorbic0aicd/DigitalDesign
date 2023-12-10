@@ -22,10 +22,13 @@ typedef enum
 #include "Qrand.h"
 void setColour(color c);
 char getColor();
+void putchar_c(const char ch, color C);
+void puts_c(const char *str,color c);
+typedef enum{true = 1,false = 0} bool;
 #define RV32
 #ifdef RV32
 #define NULL (void *)0xFFFFFFFF
-extern int vga_line;
+    extern int vga_line;
 void puts(const char* str);
 void putchar(const char ch);
 void vga_init(void);

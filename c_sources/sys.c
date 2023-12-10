@@ -14,6 +14,8 @@ unsigned char ends[32];
 short *vga_cursor_p = (short *)CURSOR_ADDR;
 
 int *timer = (int *)TIMER_ADDR;
+
+bool in_normal = true;
 #ifdef RV32
 #define true_y ((line_d + vga_line) & VGA_MAXREG)
 #define cursor_loc ((vga_ch << 5) + vga_line)
@@ -150,68 +152,80 @@ int time(int _)
 {
     return (*timer);
 }
-// unsigned int __mulsi3(unsigned int a, unsigned int b)
-// {
-//     unsigned int res = 0;
-//     while (a)
-//     {
-//         if (a & 1)
-//             res += b;
-//         a >>= 1;
-//         b <<= 1;
-//     }
-//     return res;
-// }
-// unsigned int __umodsi3(unsigned int a, unsigned int b)
-// {
-//     unsigned int bit = 1;
-//     unsigned int res = 0;
-//     while (b < a && bit && !(b & (1UL << 31)))
-//     {
-//         b <<= 1;
-//         bit <<= 1;
-//     }
-//     while (bit)
-//     {
-//         if (a >= b)
-//         {
-//             a -= b;
-//             res |= bit;
-//         }
-//         bit >>= 1;
-//         b >>= 1;
-//     }
-//     return a;
-// }
-// unsigned int __udivsi3(unsigned int a, unsigned int b)
-// {
-//     unsigned int bit = 1;
-//     unsigned int res = 0;
-//     while (b < a && bit && !(b & (1UL << 31)))
-//     {
-//         b <<= 1;
-//         bit <<= 1;
-//     }
-//     while (bit)
-//     {
-//         if (a >= b)
-//         {
-//             a -= b;
-//             res |= bit;
-//         }
-//         bit >>= 1;
-//         b >>= 1;
-//     }
-//     return res;
-// }
-
 #endif
 void setColour(color c)
 {
     global_color = c;
 }
-
 char getColor()
 {
     return global_color;
+}
+void puts_c(const char *str, color c)
+{
+    color old = global_color;
+    global_color = c;
+    for (const char *p = str; *p != 0; p++)
+        putchar(*p);
+    global_color = old;
+}
+void putchar_c(const char ch, color C)
+{
+#ifdef RV32
+    color old = global_color;
+    global_color = C;
+    if (ch == BACKSPACE) // backspace
+    {
+        vga_ch--;
+        vga_start[(vga_ch << 5) + vga_line] = 0;
+        if (vga_ch == 0)
+        {
+            if (vga_line)
+            {
+                vga_line--;
+            }
+            else
+            {
+                vga_line = 31;
+            }
+            vga_ch = ends[vga_line];
+        }
+        (*vga_cursor_p) = cursor_loc;
+        return;
+    }
+    if (ch == 10) // enter
+    {
+        ends[vga_line] = vga_ch;
+        vga_ch = 1;
+        vga_line++;
+        vga_rollLine();
+        (*vga_cursor_p) = cursor_loc;
+        return;
+    }
+
+    if (vga_ch == VGA_MAXCOL)
+    {
+        vga_ch = 1;
+        vga_line++;
+        vga_rollLine();
+    }
+    vga_start[(vga_ch << 5) + vga_line] = ch;
+    color_start[(vga_ch << 5) + vga_line] = global_color;
+    vga_ch++;
+    if (vga_ch >= VGA_MAXCOL)
+    {
+        ends[vga_line] = VGA_MAXCOL;
+        vga_ch = 1;
+        vga_line++;
+        vga_rollLine();
+    }
+    (*vga_cursor_p) = cursor_loc;
+    global_color = old;
+    return;
+#endif
+}
+void displayChar(int x,int y,char ch,color c)
+{
+    vga_start[(x << 5) + y] = ch;
+    color_start[(x << 5) + y] = c;
 }

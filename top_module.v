@@ -118,9 +118,7 @@ module top_module(
                  .reset(reset|uart_rst), 
     				 .imemaddr(iaddr), .imemdataout(idataout), .imemclk(iclk), 
     				 .dmemaddr(daddr), .dmemdataout(cpu_read_data), .dmemdatain(ddatain), .dmemrdclk(drdclk), .dmemwrclk(dwrclk), .dmemop(dop), .dmemwe(dwe), 
-    				 .dbgdata(cpudbgdata),
-                     .reg_addr(reg_addr),
-                     .reg_data(reg_data));
+    				 .dbgdata(cpudbgdata));
 
     //instruction memory, no writing
     instr_mem instructions(
