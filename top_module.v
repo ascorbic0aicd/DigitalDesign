@@ -113,7 +113,7 @@ module top_module(
                  .vga_cursor_en(cursor_en));
     //main CPU
 
-    ferquency_divider f_cpu(CLK100MHZ,2,cpu_clk);
+    ferquency_divider f_cpu(CLK100MHZ,1,cpu_clk);
     cpu mycpu(.clock(cpu_clk&~uart_halt), 
                  .reset(reset|uart_rst), 
     				 .imemaddr(iaddr), .imemdataout(idataout), .imemclk(iclk), 

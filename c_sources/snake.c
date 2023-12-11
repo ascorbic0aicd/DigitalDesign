@@ -388,8 +388,9 @@ void snake(int arg, char args[][50]){
     }
     else
     {
+        enCursor(false);
         vga_init();
-        //snake_init();
+        enCursor(true);
         snake_exec();
         sleep(500);
         vga_init();

@@ -1,6 +1,6 @@
 #define VGA_START 0x00200000
 #define KEY_LOC 0x00300000
-#define CHECK_KEY 0x10300000
+#define EN_CURSOR 0x10300000
 #define VGA_LINE_NO 0x00400000
 #define COLOR_REG 0x00500000
 #define CURSOR_ADDR 0x00600000
@@ -41,6 +41,7 @@ int time(int _);
 char kbhit(int cnt,char ignore);
 void sleep(int d);
 void clear_buf();
+void enCursor(bool f);
 #define assert(expr) if(!expr) puts("something error!\n");
 #else
 #include<stdio.h>

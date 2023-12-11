@@ -11,14 +11,18 @@ int line_d = 0;
 char need_plus_off = 0;
 unsigned char ends[32];
 short *vga_cursor_p = (short *)CURSOR_ADDR;
-
+bool cursor_en = true;
 int *timer = (int *)TIMER_ADDR;
 
 bool in_normal = true;
 #ifdef RV32
 #define true_y ((line_d + vga_line) & VGA_MAXREG)
 #define cursor_loc ((vga_ch << 5) + vga_line)
+void enCursor(bool f)
+{
 
+    cursor_en = f;
+}
 void vga_clear_line(int y)
 {
     for (int i = 0; i < VGA_MAXCOL; i++)
@@ -256,7 +260,7 @@ void vga_init()
     line_d = 0;
     vga_ch = 1;
     (*line_NO) = 0;
-    (*vga_cursor_p) = 0;
+    (*vga_cursor_p) = cursor_en?0:31;
     need_plus_off = 0;
     for (int i = 0; i < VGA_MAXCOL; i++)
     {
