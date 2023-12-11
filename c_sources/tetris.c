@@ -187,6 +187,10 @@ void print_game_area() {
 }
 
 void tetris_exec() {
+    score = 0;  // 当前得分
+    level = 1;  // 当前等级
+    speed = 300; // 游戏速度（毫秒数）
+    line_count = 0; // 当前消除的行数
     // 初始化游戏区域
     for (int i = 0; i < Height; i++) {
         for (int j = 0; j < Width; j++) {
