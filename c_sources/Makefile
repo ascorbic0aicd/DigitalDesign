@@ -28,10 +28,11 @@ ${EXEC}.tmp: ${EXEC}.elf
 ${EXEC}.hex: ${EXEC}.tmp
 	awk -v code=1 $(RISCV_HEXGEN) $< > $@
 	awk -v code=0 $(RISCV_HEXGEN) $< > ${EXEC}_d.hex
-
 ${EXEC}.coe: ${EXEC}.hex
 	awk ${RISCV_COEGEN} $< > $@
 	awk ${RISCV_COEGEN} ${EXEC}_d.hex > ${EXEC}_d.coe
+	cp *.hex bin
+	cp *.coe bin
 	
 .PHONY: all clean
 

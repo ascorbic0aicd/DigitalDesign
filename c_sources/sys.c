@@ -116,11 +116,32 @@ char getchar()
     }
     return 0;
 }
-bool kbhit()
+char kbhit(int cnt,char ignore)
 {
-    char *check_k = (char *)CHECK_KEY;
-    char p = *check_k;
-    return p != 0 ;
+    char *p = (char *)KEY_LOC;
+    volatile char temp = 0;
+    int start = (*timer); 
+    char res = 0;
+    bool flag = true;
+    while ((*timer) - start < cnt)
+    {
+        temp = *p;
+        if (temp != 0 && temp != ignore)
+        {
+            res = temp;
+        }
+    }
+    return res;
+}
+void clear_buf()
+{
+    char *p = (char *)KEY_LOC;
+    volatile char temp = *p;
+    for (int i = 0; i < 1000; i++)
+    {
+        temp = *p;
+    }
+    
 }
 void gets(char *str)
 {

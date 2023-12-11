@@ -38,8 +38,9 @@ void gets(char *str);
 void vga_rollLine();
 void vga_clear_line(int y); 
 int time(int _);
-bool kbhit();
+char kbhit(int cnt,char ignore);
 void sleep(int d);
+void clear_buf();
 #define assert(expr) if(!expr) puts("something error!\n");
 #else
 #include<stdio.h>

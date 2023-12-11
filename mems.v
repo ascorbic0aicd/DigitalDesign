@@ -214,7 +214,14 @@ module key_mem
                     cnt_fast <= 0;
                     pre_ascii <= ascii_key;
                     mem[tail] <= ascii_key;
-                    tail <= tail + 1;
+                    if (head == tail + 1) 
+                    begin
+                        tail = tail;
+                    end
+                    else
+                    begin
+                    tail <= tail + 1;    
+                    end
                 end
                 else
                 begin

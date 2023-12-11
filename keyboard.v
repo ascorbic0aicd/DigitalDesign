@@ -103,6 +103,7 @@ module keyboard(input clk,
                 else
                 begin
                     will_release <= 1'b1;
+                    cur_key <= cur_key;
                 end       
         end
         else
