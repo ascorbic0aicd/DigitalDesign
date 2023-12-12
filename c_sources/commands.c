@@ -12,10 +12,11 @@
 #include "eval.h"
 #include "snake.h"
 #include "tetris.h"
+#include "bird.h"
 
 Func funcs[NUM_OF_FUNC] = {{"hello" ,hello}, {"echo", echo}, {"fib", fib},{"help", help},{"author",author},
                             {"setcolor",setColor_in_cmd},{"clear",clear},{"time",getTime}, {"eval", eval}, {"snake", snake},
-                            {"tetris", tetris}};
+                            {"tetris", tetris}, {"bird", bird}};
 
 func_ptr findFunc(char *name)
 {
