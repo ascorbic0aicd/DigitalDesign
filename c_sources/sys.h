@@ -46,5 +46,6 @@ void enCursor(bool f);
 #else
 #include<stdio.h>
 #include<time.h>
+#define NULL (void *)0xFFFFFFFF
 #endif
 

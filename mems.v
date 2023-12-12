@@ -27,7 +27,7 @@ module instr_mem(
     input [31:0]datain,
     output [31:0]data
     );
-    instr_rom rom(.addra(addr[12:0]),.clka(clock),.dina(datain),.douta(data),.ena(1'b1),.wea(iwe));
+    instr_rom rom(.addra(addr[13:0]),.clka(clock),.dina(datain),.douta(data),.ena(1'b1),.wea(iwe));
 endmodule
 
 module data_mem(
