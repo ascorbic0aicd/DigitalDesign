@@ -253,6 +253,7 @@ void tetris_exec() {
             case 'S': case 's': move(0, 1, block_rotation); break;
             case 'D': case 'd': move(1, 0, block_rotation); break;
             case 'Q': case 'q': move(0, 0, block_rotation - 1); break;
+            case '\n':return;break;
             default: break;
             }
         }
@@ -270,7 +271,7 @@ void tetris_exec() {
         
     }
     // 游戏结束，显示最终得分
-    puts("Game Over!");
+   // puts("Game Over!");
     //printf("Game Over\n");
     //printf("Final Score: %d\n", score);
     //return 0;
@@ -283,9 +284,13 @@ void tetris(int arg, char args[][50]){
     }
     else
     {
+        enCursor(false);
         vga_init();
-        //snake_init();
         tetris_exec();
+        drawGameOver();
+        getchar();
+        vga_init();
+        enCursor(true);
         vga_init();
     }
 }

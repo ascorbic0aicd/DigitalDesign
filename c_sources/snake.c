@@ -2,7 +2,7 @@
 #include "Qrand.h"
 #include "Cmalloc.h"
 #include "Qstring.h"
- 
+#include "draw.h" 
 //声明储存蛇坐标的链表
 typedef struct Snake{
     int position[2];
@@ -390,9 +390,10 @@ void snake(int arg, char args[][50]){
     {
         enCursor(false);
         vga_init();
-        enCursor(true);
         snake_exec();
-        sleep(500);
+        drawGameOver();
+        getchar();
         vga_init();
+        enCursor(true);
     }
 }
