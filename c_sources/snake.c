@@ -392,6 +392,7 @@ void snake(int arg, char args[][50]){
         vga_init();
         snake_exec();
         drawGameOver();
+        //drawLOGO();
         getchar();
         vga_init();
         enCursor(true);

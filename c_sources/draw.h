@@ -1,1 +1,2 @@
 void drawGameOver();
+void drawLOGO();

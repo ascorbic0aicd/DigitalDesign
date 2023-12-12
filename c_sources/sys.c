@@ -260,6 +260,7 @@ void vga_init()
     line_d = 0;
     vga_ch = 1;
     (*line_NO) = 0;
+    global_color = WHITE;
     (*vga_cursor_p) = cursor_en?0:31;
     need_plus_off = 0;
     for (int i = 0; i < VGA_MAXCOL; i++)

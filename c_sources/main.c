@@ -16,6 +16,9 @@ int main()
 {
 #ifdef RV32
     vga_init();
+    drawLOGO();
+    //sleep(3000);
+    vga_init();
 #endif
     Qash();
     return 0;
