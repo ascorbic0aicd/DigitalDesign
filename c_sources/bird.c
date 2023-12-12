@@ -140,8 +140,12 @@ void bird(int arg, char args[][50]){
     }
     else
     {
+        enCursor(false);
         vga_init();
         bird_exec();
+        drawGameOver();
+        getchar();
         vga_init();
+        enCursor(true);
     }
 }
