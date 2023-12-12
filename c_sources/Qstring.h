@@ -3,4 +3,4 @@ int Qstrcmp(const char *str1, const char *str2);
 void Qdtos(char *str, double Data, int n);
 int Qstoi(const char *str);
 void Qitos(char *str, int data);
-#define NAN 0xFFFFFFFF
+#define NAN 0x7FFFFFFF

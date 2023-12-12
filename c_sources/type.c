@@ -75,11 +75,17 @@ void typeing_game(int arg, char args[][50])
                 putchar(c);
                 break;
             }
-            /*else if(c == 8)
+            else if(c == 8)
             {
-                typenum--;
-                str1[typenum] = '\0';
-            }*/
+                if(typenum == 0){
+
+                }
+                else{
+                    typenum--;
+                    str1[typenum] = '\0';
+                    putchar(c);
+                }
+            }
             else if (c != 0)
             {
                 str1[typenum] = c;

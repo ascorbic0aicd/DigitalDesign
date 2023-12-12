@@ -23,6 +23,11 @@ void fib(int arg, char args[][50])
 
             
         int temp = 0;
+        if (n==NAN)
+        {
+            return;
+        }
+        
         if (n == 0 || n == 1)
         {
             Qitos(str,n);
